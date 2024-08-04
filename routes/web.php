@@ -28,27 +28,29 @@ options
 //     return  'Olá, seja bem vindo ao curso';
 // });
 
-Route::get('/', 'PrincipalController@principal')->name('site.index');
+Route::get('/', 'PrincipalController@principal')->name('site.index')->middleware('log.acesso');
 
 Route::get('/sobre-nos', 'SobreNosController@sobreNos')->name('site.sobrenos');
 
 Route::get('/contato', 'ContatoController@contato')->name('site.contato');
-Route::post('/contato', 'ContatoController@contato')->name('site.contato');
+Route::post('/contato', 'ContatoController@salvar')->name('site.contato');
 
 Route::get('/login', function () {
     return 'login';
 })->name('site.login');
 
-Route::prefix('/app')->group(function() {
+Route::middleware('autenticacao:padrao,visitante')->prefix('/app')->group(function() {
+
     Route::get('/clientes', function() {
         return 'clientes';
     })->name('app.clientes');
     
-    Route::get('/fornecedores', 'FornecedorController@index')->name('app.fornecedores');
+    Route::get('/fornecedores', 'FornecedorController@index')
+        ->name('app.fornecedores');
     
     Route::get('/produtos', function() {
-        return 'produtos';
-    })->name('app.produtos');
+            return 'produtos';
+        })->name('app.produtos');
 });
 
 Route::get('/teste/{p1}/{p2}', 'TesteController@teste')->name('site.teste');

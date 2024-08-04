@@ -33,7 +33,7 @@ class FornecedorController extends Controller
         ];
 
         
-
+        return 'fornecedores';
         return view('app.fornecedor.index', compact('fornecedores'));
     }
 }
